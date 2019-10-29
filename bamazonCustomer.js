@@ -3,7 +3,7 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
     host: "localhost",
-    port: 3030,
+    port: 3306,
     user: "root",
 
     password: "Advance1",
@@ -14,7 +14,7 @@ connection.connect(function(err){
     if (err) throw err;
 
     displayProducts();
-    serTimeout(shop, 3000);
+    setTimeout(shop, 3000);
 
 });
 
@@ -46,9 +46,9 @@ function shop(){
                         choiceArray.push(res[i].item_id.toString());
                     }
                     return choiceArray;
-                }
+                },
                 message: "Select the ID of the product to buy the item"
-            }
+            },
             {
                 name: "quantity",
                 type: "list",
@@ -67,7 +67,7 @@ function shop(){
 
                     if(chosenItem.stock_quantity >= parseInt(answer.quantity)){
                         connection.query(
-                            "Update prodcuts Set ? Where ?",
+                            "Update products Set ? Where ?",
                             [{
                                 stock_quantity: chosenItem.stock_quantity - answer.quantity
                             },
@@ -76,7 +76,7 @@ function shop(){
                             }
                             ],
                             function(err){
-                                if (error) throw err;
+                                if (err) throw err;
                                 console.log("Your purchase was successful, you card will be charged $" + totalPaid);
                                 setTimeout(displayProducts, 3000);
                                 setTimeout(shop, 5000);
